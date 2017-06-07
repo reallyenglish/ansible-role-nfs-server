@@ -1,0 +1,37 @@
+---
+# tasks file for ansible-role-nfsd
+
+- include_vars: "{{ ansible_os_family }}.yml"
+
+- include: "install-{{ ansible_os_family }}.yml"
+
+- name: Create log directory
+  file:
+    path: "{{ nfsd_log_dir }}"
+    mode: 0755
+    owner: "{{ nfsd_user }}"
+    group: "{{ nfsd_group }}"
+    state: directory
+  notify: Restart nfsd
+
+- name: Create db directory
+  file:
+    path: "{{ nfsd_db_dir }}"
+    mode: 0755
+    owner: "{{ nfsd_user }}"
+    group: "{{ nfsd_group }}"
+    state: directory
+  notify: Restart nfsd
+
+- name: Create nfsd.conf
+  template:
+    src: nfsd.conf.j2
+    dest: "{{ nfsd_conf_file }}"
+    validate: echo %s
+  notify: Restart nfsd
+
+- name: Start nfsd
+  service:
+    name: "{{ nfsd_service }}"
+    enabled: true
+    state: started

@@ -1,0 +1,8 @@
+nfsd_user: nfsd
+nfsd_group: nfsd
+nfsd_log_dir: /var/log/nfsd
+nfsd_db_dir: "{{ __nfsd_db_dir }}"
+nfsd_service: nfsd
+nfsd_conf_dir: "{{ __nfsd_conf_dir }}"
+nfsd_conf_file: "{{ __nfsd_conf_dir }}/nfsd.conf"
+nfsd_flags: ""

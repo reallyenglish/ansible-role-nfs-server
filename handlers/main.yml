@@ -1,0 +1,6 @@
+---
+
+- name: Restart nfsd
+  service:
+    name: nfsd
+    state: restarted
