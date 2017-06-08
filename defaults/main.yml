@@ -1,8 +1,12 @@
 nfsd_user: nfsd
 nfsd_group: nfsd
-nfsd_log_dir: /var/log/nfsd
-nfsd_db_dir: "{{ __nfsd_db_dir }}"
-nfsd_service: nfsd
-nfsd_conf_dir: "{{ __nfsd_conf_dir }}"
-nfsd_conf_file: "{{ __nfsd_conf_dir }}/nfsd.conf"
+nfsd_service: "{{ __nfsd_service }}"
+nfsd_nfsd_service: "{{ __nfsd_nfsd_service }}"
+nfsd_rpc_service: "{{ __nfsd_rpc_service }}"
+nfsd_mountd_service: "{{ __nfsd_mountd_service }}"
+nfsd_mountd_flags: "{{ __nfsd_mountd_flags }}"
+nfsd_exports_file: "{{ __nfsd_exports_file }}"
 nfsd_flags: ""
+nfsd_rpc_flags: ""
+
+nfsd_exports: []

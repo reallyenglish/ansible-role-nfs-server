@@ -1,0 +1,66 @@
+---
+
+- name: Create /etc/rc.conf.d/rpcbind
+  template:
+    src: FreeBSD.rpcbind.rc.j2
+    dest: /etc/rc.conf.d/rpcbind
+    validate: sh -n %s
+  notify:
+    - Restart RPC
+
+- name: Enable RPC service
+  service:
+    name: "{{ nfsd_rpc_service }}"
+    enabled: true
+
+- name: Create /etc/rc.conf.d/mountd
+  template:
+    src: FreeBSD.mountd.rc.j2
+    dest: /etc/rc.conf.d/mountd
+    validate: sh -n %s
+  notify:
+    - Restart mountd
+
+- name: Create /etc/rc.conf.d/nfsd
+  # enable meta service, nfs_server.
+  #
+  # XXX you cannot use service module to enable `nfs_server` because the module
+  # looks for /etc/rc.d/nfs_server to enable the service, but it does not exist.
+  # the module bails out with an error message; "nfs_server does not exist in
+  # /etc/rc.d"
+  template:
+    src: FreeBSD.nfsd.rc.j2
+    dest: /etc/rc.conf.d/nfsd
+    validate: sh -n %s
+  notify:
+    - Restart nfsd
+
+- name: Create exports(5)
+  template:
+    src: exports.j2
+    dest: "{{ nfsd_exports_file }}"
+    #validate: echo %s
+  notify:
+    - Reload mountd
+
+- name: Enable mountd
+  service:
+    name: mountd
+    enabled: true
+
+- name: Start nfsd
+  service:
+    name: "{{ nfsd_nfsd_service }}"
+    state: started
+
+- name: See registered services in RPC
+  shell: rpcinfo -s | awk '{ print $4 }'
+  register: register_rpcinfo_s
+  changed_when: false
+
+- name: Assert all services are registered
+  assert:
+    that:
+      - "'mountd' in register_rpcinfo_s.stdout_lines"
+      - "'rpcbind' in register_rpcinfo_s.stdout_lines"
+      - "'nfs' in register_rpcinfo_s.stdout_lines"

@@ -1,6 +1,1 @@
 ---
-
-- name: Install nfsd
-  pkgng:
-    name: nfsd
-    state: present

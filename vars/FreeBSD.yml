@@ -1,2 +1,6 @@
-__nfsd_db_dir: /var/db/nfsd
-__nfsd_conf_dir: /usr/local/etc/nfsd
+__nfsd_service: nfs_server
+__nfsd_nfsd_service: nfsd
+__nfsd_mountd_service: mountd
+__nfsd_exports_file: /etc/exports
+__nfsd_rpc_service: rpcbind
+__nfsd_mountd_flags: ""

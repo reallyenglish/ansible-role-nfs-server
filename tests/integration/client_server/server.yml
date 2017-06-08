@@ -1,0 +1,39 @@
+---
+- hosts: server
+  become: yes
+  become_method: sudo
+  environment:
+    http_proxy: "{{ http_proxy | default() }}"
+    https_proxy: "{{ https_proxy | default() }}"
+    no_proxy: "{{ no_proxy | default() }}"
+
+  pre_tasks:
+    - name: Create /exports
+      file:
+        path: /exports
+        state: directory
+
+    - name: Create ro
+      file:
+        path: /exports/ro
+        state: directory
+
+    - name: Create ro/foo
+      file:
+        path: /exports/ro/foo
+        state: touch
+
+    - name: Create rw
+      file:
+        path: /exports/rw
+        owner: nobody
+        group: nobody
+        state: directory
+        mode: 0755
+  roles:
+    - role: ansible-role-nfs-server
+  vars:
+    nfsd_flags: "-t -u -n 4 -h {{ ansible_em1.ipv4[0].address }}"
+    nfsd_exports:
+      - /exports/ro /exports/rw -maproot=nobody -network 192.168.21.0/24
+      - /exports/ro -ro -mapall=nobody

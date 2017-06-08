@@ -1,6 +1,24 @@
 ---
 
+- name: Restart RPC
+  service:
+    name: "{{ nfsd_rpc_service }}"
+    state: restarted
+  notify:
+    - Restart nfsd
+    - Restart mountd
+
 - name: Restart nfsd
   service:
     name: nfsd
     state: restarted
+
+- name: Restart mountd
+  service:
+    name: mountd
+    state: restarted
+
+- name: Reload mountd
+  service:
+    name: mountd
+    state: reloaded
