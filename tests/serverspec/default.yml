@@ -2,8 +2,11 @@
   roles:
     - ansible-role-nfs-server
   vars:
-    nfsd_exports:
-      - /usr/local -network 192.168.1.0/24
+    nfsd_exports: "{% if ansible_os_family == 'FreeBSD' or ansible_os_family == 'OpenBSD' %}[ '/usr/local -network 192.168.1.0/24' ]{% elif ansible_os_family == 'Debian' %}[ '/usr/local 192.168.1.0/24' ]{% endif %}"
     nfsd_mountd_flags: -r
     nfsd_flags: -n 4
     nfsd_rpc_flags: "-h {{ ansible_default_ipv4.address }}"
+
+    # Debian
+    nfsd_server_nfs_kernel_server_flags:
+      RPCNFSDCOUNT: 4

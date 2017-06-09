@@ -8,6 +8,14 @@
     - Restart nfsd
     - Restart mountd
 
+- name: Restart portmap
+  service:
+    name: portmap
+    state: restarted
+  notify:
+    - Restart nfsd
+    - Restart mountd
+
 - name: Restart nfsd
   service:
     name: nfsd
@@ -22,3 +30,48 @@
   service:
     name: mountd
     state: reloaded
+
+- name: Reload nfs-mountd
+  service:
+    name: nfs-mountd
+    state: reloaded
+
+- name: Restart nfs-server
+  service:
+    name: nfs-server
+    state: restarted
+
+- name: Restart nfs-kernel-server
+  service:
+    name: nfs-kernel-server
+    state: restarted
+
+- name: Restart portmap OpenBSD
+  service:
+    name: portmap
+    state: restarted
+  notify:
+    - Restart nfsd
+    - Restart mountd OpenBSD
+
+- name: Restart mountd OpenBSD
+  # XXX /etc/rc.d/mountd has 'rc_stop=NO'. you cannot restart it even when
+  # mountd_flags has changed.
+  #
+  # if there is need to send a SIGTERM to mountd(8), it should be done
+  # manually as there is too much involved with RPC daemons to make it
+  # automagic.
+  # https://github.com/openbsd/src/commit/9217ca7aa6c2a8a0f0d5bd8516dbc7273e3686d2
+  shell: pkill mountd
+  notify:
+    - Start mountd OpenBSD
+
+- name: Start mountd OpenBSD
+  service:
+    name: mountd
+    state: started
+  # XXX use retry here as restarting mountd in handler fails
+  register: register_start_mountd
+  until: register_start_mountd | success
+  retries: 10
+  delay: 2

@@ -3,4 +3,4 @@
 - name: reallyenglish.nfs-client
   scm: git
   src: https://github.com/reallyenglish/ansible-role-nfs-client.git
-  version: initial_implementation
+  version: master

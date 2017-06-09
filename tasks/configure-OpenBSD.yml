@@ -1,0 +1,59 @@
+---
+
+- name: Enable portmap
+  service:
+    name: portmap
+    enabled: yes
+    # TODO make this configurable
+    arguments: ""
+  notify: Restart portmap OpenBSD
+
+- name: Enable mountd
+  service:
+    name: mountd
+    enabled: yes
+    arguments: "{{ nfsd_mountd_flags }}"
+  notify: Restart mountd OpenBSD
+
+- name: Enable nfsd
+  service:
+    name: nfsd
+    enabled: yes
+    # TODO make this configurable
+    arguments: "-tun 4"
+  notify: Restart nfsd
+
+- name: Create exports(5)
+  template:
+    src: exports.j2
+    dest: "{{ nfsd_exports_file }}"
+    #validate: echo %s
+  notify:
+    - Reload mountd
+
+- name: Start portmap
+  service:
+    name: portmap
+    state: started
+
+- name: Start mountd
+  service:
+    name: mountd
+    state: started
+
+- name: Start nfsd
+  service:
+    name: nfsd
+    state: started
+
+- name: See registered services in RPC
+  shell: "rpcinfo -p localhost | awk '{ print $5 }'"
+  register: register_rpcinfo_p
+  changed_when: false
+
+- name: Assert all services are registered
+  assert:
+    that:
+      - "'portmapper' in register_rpcinfo_p.stdout_lines"
+      - "'nfs' in register_rpcinfo_p.stdout_lines"
+      - "'mountd' in register_rpcinfo_p.stdout_lines"

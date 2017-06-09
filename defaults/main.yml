@@ -9,4 +9,19 @@ nfsd_exports_file: "{{ __nfsd_exports_file }}"
 nfsd_flags: ""
 nfsd_rpc_flags: ""
 
+
+# Ubuntu-specific
+nfsd_server_nfs_kernel_server_flags_default:
+  RPCNFSDCOUNT: 8
+  RPCNFSDPRIORITY: 0
+  RPCMOUNTDOPTS: "--manage-gids"
+  NEED_SVCGSSD: ""
+  RPCSVCGSSDOPTS: ""
+  RPCNFSDOPTS: ""
+nfsd_server_nfs_kernel_server_flags: {}
+nfsd_server_nfs_common_flags_default:
+  STATDOPTS: ""
+  NEED_GSSD: ""
+nfsd_server_nfs_common_flags: {}
+
 nfsd_exports: []
