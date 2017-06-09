@@ -29,7 +29,7 @@ context "after provisioning finished" do
     it "creates a file, /exports/rw/bar" do
       current_server.ssh_exec("touch /exports/rw/bar")
       r = current_server.ssh_exec("ls /exports/rw/bar")
-      expect(r).to match(%r{\/exports\/rw\/bar})
+      expect(r).to match(%r{/exports/rw/bar})
     end
   end
 end
