@@ -33,7 +33,7 @@
   roles:
     - role: ansible-role-nfs-server
   vars:
-    nfsd_flags: "-t -u -n 4 -h {{ ansible_em1.ipv4[0].address }}"
-    nfsd_exports:
+    nfs_server_nfsd_flags: "-t -u -n 4 -h {{ ansible_em1.ipv4[0].address }}"
+    nfs_server_exports:
       - /exports/ro /exports/rw -maproot=nobody -network 192.168.21.0/24
       - /exports/ro -ro -mapall=nobody

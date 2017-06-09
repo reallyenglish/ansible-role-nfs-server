@@ -10,7 +10,7 @@
 
 - name: Enable RPC service
   service:
-    name: "{{ nfsd_rpc_service }}"
+    name: rpcbind
     enabled: true
 
 - name: Create /etc/rc.conf.d/mountd
@@ -38,7 +38,7 @@
 - name: Create exports(5)
   template:
     src: exports.j2
-    dest: "{{ nfsd_exports_file }}"
+    dest: "{{ nfs_server_exports_file }}"
     #validate: echo %s
   notify:
     - Reload mountd
@@ -50,7 +50,7 @@
 
 - name: Start nfsd
   service:
-    name: "{{ nfsd_nfsd_service }}"
+    name: nfsd
     state: started
 
 - name: See registered services in RPC

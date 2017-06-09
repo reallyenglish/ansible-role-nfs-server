@@ -1,10 +1,10 @@
 ---
 
 - set_fact:
-    nfsd_server_nfs_kernel_server_flags_merged: "{{ nfsd_server_nfs_kernel_server_flags_default | combine(nfsd_server_nfs_kernel_server_flags) }}"
+    nfs_server_nfs_kernel_server_flags_merged: "{{ nfs_server_nfs_kernel_server_flags_default | combine(nfs_server_nfs_kernel_server_flags) }}"
 
 - set_fact:
-    nfsd_server_nfs_common_flags_merged: "{{ nfsd_server_nfs_common_flags_default | combine(nfsd_server_nfs_common_flags) }}"
+    nfs_server_nfs_common_flags_merged: "{{ nfs_server_nfs_common_flags_default | combine(nfs_server_nfs_common_flags) }}"
 
 - set_fact:
     nfs_server_ubuntu_nfs_server_service: '{% if ansible_distribution_version | version_compare("16.04", ">=") %}nfs-server{% else %}nfs-kernel-server{% endif %}'
@@ -14,6 +14,7 @@
     src: Ubuntu.nfs-kernel-server.default.j2
     dest: /etc/default/nfs-kernel-server
     backup: yes
+    validate: sh -n %s
   notify: "Restart {{ nfs_server_ubuntu_nfs_server_service }}"
 
 - name: Create /etc/default/nfs-common
@@ -21,12 +22,13 @@
     src: Ubuntu.nfs-common.default.j2
     dest: /etc/default/nfs-common
     backup: yes
+    validate: sh -n %s
   notify: "Restart {{ nfs_server_ubuntu_nfs_server_service }}"
 
 - name: Create exports(5)
   template:
     src: exports.j2
-    dest: "{{ nfsd_exports_file }}"
+    dest: "{{ nfs_server_exports_file }}"
     #validate: echo %s
 
 - name: Start NFS server service

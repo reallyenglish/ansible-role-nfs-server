@@ -2,15 +2,7 @@
 
 - name: Restart RPC
   service:
-    name: "{{ nfsd_rpc_service }}"
-    state: restarted
-  notify:
-    - Restart nfsd
-    - Restart mountd
-
-- name: Restart portmap
-  service:
-    name: portmap
+    name: rpcbind
     state: restarted
   notify:
     - Restart nfsd

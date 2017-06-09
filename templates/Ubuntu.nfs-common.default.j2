@@ -1,5 +1,5 @@
 # Managed by ansible
 
-{% for k, v in nfsd_server_nfs_common_flags_merged | dictsort() %}
+{% for k, v in nfs_server_nfs_common_flags_merged | dictsort() %}
 {{ k }}="{{ v }}"
 {% endfor %}

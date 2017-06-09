@@ -1,27 +1,21 @@
-nfsd_user: nfsd
-nfsd_group: nfsd
-nfsd_service: "{{ __nfsd_service }}"
-nfsd_nfsd_service: "{{ __nfsd_nfsd_service }}"
-nfsd_rpc_service: "{{ __nfsd_rpc_service }}"
-nfsd_mountd_service: "{{ __nfsd_mountd_service }}"
-nfsd_mountd_flags: "{{ __nfsd_mountd_flags }}"
-nfsd_exports_file: "{{ __nfsd_exports_file }}"
-nfsd_flags: ""
-nfsd_rpc_flags: ""
+nfs_server_exports_file: "{{ __nfs_server_exports_file }}"
+nfs_server_exports: []
 
+# FreeBSD and OpenBSD
+nfs_server_mountd_flags: "{{ __nfs_server_mountd_flags }}"
+nfs_server_nfsd_flags: "{{ __nfs_server_nfsd_flags }}"
+nfs_server_rpc_flags: "{{ __nfs_server_rpc_flags }}"
 
 # Ubuntu-specific
-nfsd_server_nfs_kernel_server_flags_default:
+nfs_server_nfs_kernel_server_flags: {}
+nfs_server_nfs_kernel_server_flags_default:
   RPCNFSDCOUNT: 8
   RPCNFSDPRIORITY: 0
   RPCMOUNTDOPTS: "--manage-gids"
   NEED_SVCGSSD: ""
   RPCSVCGSSDOPTS: ""
   RPCNFSDOPTS: ""
-nfsd_server_nfs_kernel_server_flags: {}
-nfsd_server_nfs_common_flags_default:
+nfs_server_nfs_common_flags: {}
+nfs_server_nfs_common_flags_default:
   STATDOPTS: ""
   NEED_GSSD: ""
-nfsd_server_nfs_common_flags: {}
-
-nfsd_exports: []

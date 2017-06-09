@@ -1,6 +1,4 @@
-__nfsd_service: nfs_server
-__nfsd_nfsd_service: nfsd
-__nfsd_mountd_service: mountd
-__nfsd_exports_file: /etc/exports
-__nfsd_rpc_service: rpcbind
-__nfsd_mountd_flags: ""
+__nfs_server_exports_file: /etc/exports
+__nfs_server_mountd_flags: ""
+__nfs_server_nfsd_flags: ""
+__nfs_server_rpc_flags: ""

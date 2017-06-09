@@ -4,29 +4,27 @@
   service:
     name: portmap
     enabled: yes
-    # TODO make this configurable
-    arguments: ""
+    arguments: "{{ nfs_server_rpc_flags }}"
   notify: Restart portmap OpenBSD
 
 - name: Enable mountd
   service:
     name: mountd
     enabled: yes
-    arguments: "{{ nfsd_mountd_flags }}"
+    arguments: "{% if  nfs_server_mountd_flags | length > 0 %}{{ nfs_server_mountd_flags }} {% endif %}{{ nfs_server_exports_file }}"
   notify: Restart mountd OpenBSD
 
 - name: Enable nfsd
   service:
     name: nfsd
     enabled: yes
-    # TODO make this configurable
-    arguments: "-tun 4"
+    arguments: "{{ nfs_server_nfsd_flags }}"
   notify: Restart nfsd
 
 - name: Create exports(5)
   template:
     src: exports.j2
-    dest: "{{ nfsd_exports_file }}"
+    dest: "{{ nfs_server_exports_file }}"
     #validate: echo %s
   notify:
     - Reload mountd

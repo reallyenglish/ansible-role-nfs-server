@@ -30,6 +30,15 @@ end
 
 case os[:family]
 when "openbsd"
+  describe file("/etc/rc.conf.local") do
+    it { should exist }
+    it { should be_file }
+    it { should be_mode 644 }
+    it { should be_owned_by default_user }
+    it { should be_grouped_into default_group }
+    its(:content) { should match(/^mountd_flags=#{Regexp.escape("/etc/exports")}$/) }
+    its(:content) { should match(/^nfsd_flags=-tun 5$/) }
+  end
   describe service("nfsd") do
     it { should be_enabled }
     it { should be_running }
@@ -122,7 +131,7 @@ when "freebsd"
     it { should be_grouped_into default_group }
     # XXX you cannot use service("nfs_server") because such service does not exist
     its(:content) { should match(/^nfs_server_enable="YES"$/) }
-    its(:content) { should match(/^nfs_server_flags="-n 4"$/) }
+    its(:content) { should match(/^nfs_server_flags="-tun 5"$/) }
   end
 
   describe file("/etc/rc.conf.d/rpcbind") do

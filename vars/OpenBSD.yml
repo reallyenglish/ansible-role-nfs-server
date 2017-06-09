@@ -1,2 +1,5 @@
 ---
-__nfsd_exports_file: /etc/exports
+__nfs_server_exports_file: /etc/exports
+__nfs_server_mountd_flags: "-tun 4"
+__nfs_server_nfsd_flags: ""
+__nfs_server_rpc_flags: ""
