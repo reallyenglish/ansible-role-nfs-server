@@ -1,0 +1,31 @@
+---
+- hosts: client
+  become: yes
+  become_method: sudo
+  environment:
+    http_proxy: "{{ http_proxy | default() }}"
+    https_proxy: "{{ https_proxy | default() }}"
+    no_proxy: "{{ no_proxy | default() }}"
+
+  pre_tasks:
+    - name: Create mount points
+      file:
+        path: "/mnt/{{ item }}"
+        state: directory
+      with_items:
+        - ro
+        - rw
+  roles:
+    - reallyenglish.nfs-client
+  vars:
+    nfs_client_mount:
+      - path: /mnt/ro
+        src: 192.168.21.200:/exports/ro
+        boot: yes
+        opts: ro
+        state: mounted
+      - path: /mnt/rw
+        src: 192.168.21.200:/exports/rw
+        boot: yes
+        opts: rw
+        state: mounted
