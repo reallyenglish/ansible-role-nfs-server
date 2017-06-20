@@ -167,7 +167,7 @@ when "freebsd"
 
   describe command("mount") do
     its(:exit_status) { should eq 0 }
-    its(:stdout) { should match(/#{Regexp.escape("/dev/da0p2 on / (ufs, NFS exported, local, journaled soft-updates)")}/) }
+    its(:stdout) { should match(%r{/dev/a?da0p2\s+#{Regexp.escape("on / (ufs, NFS exported, local, journaled soft-updates)")}}) }
     its(:stderr) { should eq "" }
   end
 end
